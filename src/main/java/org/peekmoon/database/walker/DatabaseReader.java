@@ -1,4 +1,4 @@
-package com.onepoint.database.walker;
+package org.peekmoon.database.walker;
 
 import java.sql.Clob;
 import java.sql.Connection;
@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.onepoint.database.walker.schema.CustomClob;
-import com.onepoint.database.walker.schema.ForeignKey;
-import com.onepoint.database.walker.schema.Key;
-import com.onepoint.database.walker.schema.KeyValue;
-import com.onepoint.database.walker.schema.Schema;
-import com.onepoint.database.walker.schema.Table;
+import org.peekmoon.database.walker.schema.CustomClob;
+import org.peekmoon.database.walker.schema.ForeignKey;
+import org.peekmoon.database.walker.schema.Key;
+import org.peekmoon.database.walker.schema.KeyValue;
+import org.peekmoon.database.walker.schema.Schema;
+import org.peekmoon.database.walker.schema.Table;
 
 public class DatabaseReader {
 

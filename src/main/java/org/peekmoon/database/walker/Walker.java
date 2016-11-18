@@ -1,10 +1,10 @@
-package com.onepoint.database.walker;
+package org.peekmoon.database.walker;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.onepoint.database.walker.schema.KeyValue;
-import com.onepoint.database.walker.schema.Table;
+import org.peekmoon.database.walker.schema.KeyValue;
+import org.peekmoon.database.walker.schema.Table;
 
 public class Walker {
 	

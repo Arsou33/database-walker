@@ -1,4 +1,4 @@
-package com.onepoint.database.walker;
+package org.peekmoon.database.walker;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.onepoint.database.walker.schema.Schema;
+import org.peekmoon.database.walker.schema.Schema;
 
 import java.util.Set;
 

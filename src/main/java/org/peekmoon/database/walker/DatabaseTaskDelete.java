@@ -1,4 +1,4 @@
-package com.onepoint.database.walker;
+package org.peekmoon.database.walker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.onepoint.database.walker.schema.Table;
+import org.peekmoon.database.walker.schema.Table;
 
 public class DatabaseTaskDelete {
 	

@@ -1,4 +1,4 @@
-package com.onepoint.database.walker.schema;
+package org.peekmoon.database.walker.schema;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.onepoint.database.walker;
+package org.peekmoon.database.walker;
 
 import java.sql.Clob;
 import java.sql.Connection;
@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.onepoint.database.walker.schema.CustomClob;
-import com.onepoint.database.walker.schema.Table;
+import org.peekmoon.database.walker.schema.CustomClob;
+import org.peekmoon.database.walker.schema.Table;
 
 public class DatabaseTaskInsert {
 
