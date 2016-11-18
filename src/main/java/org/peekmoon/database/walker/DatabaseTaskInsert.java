@@ -1,5 +1,6 @@
 package org.peekmoon.database.walker;
 
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;
 import org.peekmoon.database.walker.schema.Table;
 
@@ -27,6 +29,7 @@ public class DatabaseTaskInsert {
 		String sql = table.getSqlInsert();
 		// TODO : mutualize preparedStatement
 		List<Clob> clobs = new LinkedList<>();
+		List<Blob> blobs = new LinkedList<>();
 		try (PreparedStatement stmt =  conn.prepareStatement(sql)) {
 			System.out.println(sql);
 			
@@ -38,6 +41,10 @@ public class DatabaseTaskInsert {
 					Clob clob = ((CustomClob)value).asClob(conn);
 					clobs.add(clob);
 					value = clob;
+				} else if (value instanceof CustomBlob) {
+					Blob blob = ((CustomBlob)value).asBlob(conn);
+					blobs.add(blob);
+					value = blob;
 				}
 
 				stmt.setObject(i+1, value);
@@ -46,6 +53,7 @@ public class DatabaseTaskInsert {
 		} 
 		finally {
 			for (Clob clob : clobs) clob.free();
+			for (Blob blob : blobs) blob.free();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package org.peekmoon.database.walker;
 
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;
 import org.peekmoon.database.walker.schema.ForeignKey;
 import org.peekmoon.database.walker.schema.Key;
@@ -74,8 +76,11 @@ public class DatabaseReader {
 				Row row = new Row(key.getTable(), resultSet.getRowId("ROWID"));
 				for (int noCol=2; noCol<=resultSet.getMetaData().getColumnCount(); noCol++) {
 					Object columnData = resultSet.getObject(noCol);
+					
 					if (columnData instanceof Clob) {
 						columnData = new CustomClob(resultSet.getClob(noCol));
+					} else if (columnData instanceof Blob) {
+						columnData = new CustomBlob(resultSet.getBlob(noCol));
 					}
 					row.add(columnData);
 				}

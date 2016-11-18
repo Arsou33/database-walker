@@ -12,13 +12,10 @@ public class CustomClob {
 	
 	private final String value;
 	
+	// TODO : Check it is ok for null/empty string
 	public CustomClob(Clob clob) throws SQLException {
 		int length = (int)clob.length();
-		if (length != 0) {
-			this.value = clob.getSubString(1, length);
-		} else {
-			value = "";
-		}
+		this.value = clob.getSubString(1, length);
 	}
 	
 	public Clob asClob(Connection conn) throws SQLException {
