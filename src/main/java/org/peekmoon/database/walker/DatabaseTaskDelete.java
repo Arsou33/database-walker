@@ -7,8 +7,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.peekmoon.database.walker.schema.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseTaskDelete {
+	
+	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
+
 	
 	public void delete(Connection conn, Fragment fragment) throws SQLException {
 		for (Set<Row> partition : fragment.getDeleteOrderedPartitions()) {
@@ -23,7 +28,7 @@ public class DatabaseTaskDelete {
 		String sql = getSqlDelete(row.getTable());
 		// TODO : mutualize preparedStatement
 		try (PreparedStatement stmt =  conn.prepareStatement(sql)) {
-			System.out.println(sql);
+			log.debug(sql);
 			
 			int i=1;
 			for (Object value : row.getPrimaryKeyValue().list()) {

@@ -12,8 +12,12 @@ import java.util.Set;
 import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;
 import org.peekmoon.database.walker.schema.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseTaskInsert {
+	
+	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
 
 	public void insert(Connection conn, Fragment fragment) throws SQLException {
 		for (Set<Row> partition : fragment.getInsertOrderedPartitions()) {
@@ -31,7 +35,7 @@ public class DatabaseTaskInsert {
 		List<Clob> clobs = new LinkedList<>();
 		List<Blob> blobs = new LinkedList<>();
 		try (PreparedStatement stmt =  conn.prepareStatement(sql)) {
-			System.out.println(sql);
+			log.debug(sql);
 			
 			for (int i=0; i<row.getValues().size(); i++) {
 				

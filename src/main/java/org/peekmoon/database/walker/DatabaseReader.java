@@ -16,10 +16,13 @@ import org.peekmoon.database.walker.schema.Key;
 import org.peekmoon.database.walker.schema.KeyValue;
 import org.peekmoon.database.walker.schema.Schema;
 import org.peekmoon.database.walker.schema.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseReader {
-
 	
+	private final static Logger log = LoggerFactory.getLogger(DatabaseReader.class);
+
 	private final Schema schema;
 	
 	public DatabaseReader(Schema schema) {
@@ -47,10 +50,12 @@ public class DatabaseReader {
 	// TODO : mutualize preparedStatement ?
 	private void parcours(Connection conn, Row row, int niveau, Fragment fragment) throws SQLException  {
 		niveau++;
-		StringBuilder log = new StringBuilder();
-		for (int i=0; i<niveau; i++) log.append("-");
-		log.append('>').append(row);
-		System.out.println(log);
+		if (log.isDebugEnabled()) {
+			StringBuilder logString = new StringBuilder();
+			for (int i=0; i<niveau; i++) logString.append("-");
+			logString.append('>').append(row);
+			log.debug(logString.toString());
+		}
 		
 		fragment.add(row);
 		for (ForeignKey fk : schema.getFkList(row.getPrimaryKey())) {

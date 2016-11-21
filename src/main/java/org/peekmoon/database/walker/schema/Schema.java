@@ -12,7 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Schema {
+	
+	private final static Logger log = LoggerFactory.getLogger(Schema.class);
 	
 	private final SchemaFilter filter;
 	private final List<Table> tables = new ArrayList<>();
@@ -53,23 +60,26 @@ public class Schema {
 			;
 	
 
+	public Schema(DataSource ds) throws SQLException {
+		this(ds, new EmptyFilter()); 
+	}	
+	
+	public Schema(DataSource ds, SchemaFilter filter) throws SQLException {
+		this.filter = filter; 
+		try (Connection conn = ds.getConnection()) {
+			init(conn);
+		}
+	}	
+	
+	
+	public Schema(Connection conn) {
+		this(conn, new EmptyFilter());
+	}
+
 	
 	public Schema(Connection conn, SchemaFilter filter) {
 		this.filter = filter;
-		String url = "unknown";
-		try {
-			url = conn.getMetaData().getURL();
-			System.out.println("Reading tables...");
-			fillTables(conn);
-			System.out.println("Reading primary keys...");
-			fillPrimaryKeys(conn);
-			System.out.println("Reading foreign keys...");
-			fillForeignKeys(conn);
-			System.out.println("Read schema OK : ");
-			tables.stream().forEach(table -> System.out.println(" " + table.getName()));
-		} catch (SQLException e) {
-			throw new IllegalStateException("Unable to extract references for " + url, e);
-		}		
+		init(conn);
 	}
 
 	public List<Table> getTables() {
@@ -92,6 +102,23 @@ public class Schema {
 		List<ForeignKey> fks = fksByPk.get(pk);
 		if (fks == null) fksByPk.put(pk, fks = new ArrayList<>());
 		return fks;
+	}
+	
+	private void init(Connection conn) {
+		String url = "***unknown***";
+		try {
+			url = conn.getMetaData().getURL();
+			log.info("Reading tables...");
+			fillTables(conn);
+			log.info("Reading primary keys...");
+			fillPrimaryKeys(conn);
+			log.info("Reading foreign keys...");
+			fillForeignKeys(conn);
+			log.info("Reading schema OK");
+			tables.stream().forEach(table -> log.debug(table.getName()));
+		} catch (SQLException e) {
+			throw new IllegalStateException("Unable to extract references for " + url, e);
+		}		
 	}
 
 	private void fillTables(Connection conn) throws SQLException {
