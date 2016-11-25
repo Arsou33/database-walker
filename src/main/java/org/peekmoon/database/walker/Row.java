@@ -59,6 +59,14 @@ public class Row {
 		return table;
 	}
 	
+	public void setValue(int idcolumn, Object value){
+	    values.set(idcolumn, value);
+	}
+	
+	public void setValue(String columnName, Object value){
+	    this.setValue(table.getColumnIdx(columnName), value);
+	}
+	
 	public String values() {
 		StringBuilder lineColumnName = new StringBuilder();
 		StringBuilder lineValue = new StringBuilder();
