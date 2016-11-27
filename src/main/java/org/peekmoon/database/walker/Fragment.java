@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.peekmoon.database.walker.schema.Schema;
 
@@ -17,6 +18,12 @@ public class Fragment {
 
 	public Fragment(Schema schema) {
 		this.schema = schema;
+	}
+	
+	public Set<Row> getRowsFromTable(String tableName){
+	    return rowsChildGraph.keySet().stream()
+	        .filter(row -> row.getTable().getName().equalsIgnoreCase(tableName))
+	        .collect(Collectors.toSet());
 	}
 
 	public boolean contains(Row row) {
