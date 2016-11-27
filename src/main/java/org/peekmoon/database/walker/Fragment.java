@@ -1,5 +1,6 @@
 package org.peekmoon.database.walker;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.peekmoon.database.walker.schema.Schema;
+import org.peekmoon.database.walker.schema.Table;
 
 public class Fragment {
 	
@@ -20,27 +22,40 @@ public class Fragment {
 		this.schema = schema;
 	}
 	
-	public Set<Row> getRowsFromTable(String tableName){
-	    return rowsChildGraph.keySet().stream()
-	        .filter(row -> row.getTable().getName().equalsIgnoreCase(tableName))
-	        .collect(Collectors.toSet());
-	}
-
-	public boolean contains(Row row) {
-		return rowsChildGraph.keySet().contains(row);
+	public Schema getSchema() {
+		return schema;
 	}
 	
-	public void add(Row row) {
+	public Set<Row> getRows() {
+		return Collections.unmodifiableSet(rowsChildGraph.keySet());
+	}
+
+	public Set<Row> getRowsFromTable(String tableName) {
+		return getRowsFromTable(schema.getTable(tableName));
+	}
+	
+	public Set<Row> getRowsFromTable(Table table) {
+	    Set<Row> rows = rowsChildGraph.keySet().stream()
+		        .filter(row -> row.getTable().equals(table))
+		        .collect(Collectors.toSet());
+		return Collections.unmodifiableSet(rows);
+	}
+
+	public int getNbRows() {
+		return rowsChildGraph.keySet().size();
+	}
+
+	void add(Row row) {
 		rowsChildGraph.computeIfAbsent(row, c -> new HashSet<>());
 		rowsParentGraph.computeIfAbsent(row, c -> new HashSet<>());
 	}
 	
-	public void add(Row childRow, Row row) {
+	void add(Row childRow, Row row) {
 		rowsChildGraph.get(childRow).add(row);
 		rowsParentGraph.get(row).add(childRow);
 	}
 
-	public void add(Fragment fragment) {
+	void add(Fragment fragment) {
 		for (Entry<Row, Set<Row>> childEntry : fragment.rowsChildGraph.entrySet()) {
 			rowsChildGraph.computeIfAbsent(childEntry.getKey(), c -> new HashSet<>()).addAll(childEntry.getValue());
 		}
@@ -48,13 +63,13 @@ public class Fragment {
 			rowsParentGraph.computeIfAbsent(parentEntry.getKey(), c -> new HashSet<>()).addAll(parentEntry.getValue());
 		}
 	}
-
-	public int getNbRows() {
-		return rowsChildGraph.keySet().size();
+	
+	Set<Row> getChilds(Row row) {	
+		return Collections.unmodifiableSet(rowsParentGraph.get(row));
 	}
 
-	public Schema getSchema() {
-		return schema;
+	boolean contains(Row row) {
+		return rowsChildGraph.keySet().contains(row);
 	}
 	
 	/**

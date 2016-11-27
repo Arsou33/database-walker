@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.peekmoon.database.walker.schema.KeyValue;
+import org.peekmoon.database.walker.schema.Key;
 import org.peekmoon.database.walker.schema.PrimaryKey;
 import org.peekmoon.database.walker.schema.Table;
 
@@ -23,7 +23,7 @@ public class Row {
 	}
 	
 	/**
-	 * @return Values of primaryKey columns. If table have no primary key value of all columns. 
+	 * @return Values of primaryKey columns. If table have no primary key, value of all columns. 
 	 */
 	public KeyValue getPrimaryKeyValue() {
 		KeyValue keyValue = new KeyValue();
@@ -37,6 +37,32 @@ public class Row {
 			keyValue.add(values.get(idx));
 		}
 		return keyValue;
+	}
+	
+	public void updateValue(String columnName, Object value) {
+		// TODO : Changed value for primarykey is not allowed
+		int idx = table.getColumnIdx(columnName);
+		Object oldValue = values.get(idx);
+		if (!oldValue.getClass().equals(value.getClass())) {
+			throw new IllegalArgumentException("Old and new class are differents " + oldValue.getClass() + "=>" + value.getClass());
+		}
+		values.set(idx, value);
+	}
+
+	void updatePrimaryKeyValue(KeyValue newValue) {
+		if (table.getPrimaryKey()==null) throw new IllegalStateException("Row " + this + " have no primary key");
+		updateKeyValue(table.getPrimaryKey(), newValue);
+	}
+
+	void updateKeyValue(Key key, KeyValue newValue) {
+		if (!key.getTable().equals(table)) {
+			throw new IllegalStateException("Try to update keyvalue " + newValue + " on row " + this + " with fk " + key);
+		}
+		int i=0;
+		// Update primary key
+		for (int idx : key.getColumnIdxs()) {
+			values.set(idx, newValue.get(i++));	
+		}
 	}
 
 	public void add(Object object) {
@@ -59,15 +85,7 @@ public class Row {
 		return table;
 	}
 	
-	public void setValue(int idcolumn, Object value){
-	    values.set(idcolumn, value);
-	}
-	
-	public void setValue(String columnName, Object value){
-	    this.setValue(table.getColumnIdx(columnName), value);
-	}
-	
-	public String values() {
+	public String toStringDetail() {
 		StringBuilder lineColumnName = new StringBuilder();
 		StringBuilder lineValue = new StringBuilder();
 		for (int i=0; i<values.size(); i++) {
@@ -116,11 +134,6 @@ public class Row {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
-	
+
 
 }
