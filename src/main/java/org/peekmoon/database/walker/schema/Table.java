@@ -45,10 +45,6 @@ public class Table {
 		return name;
 	}
 	
-	public KeyValue getKeyValue(Table affAffaire) {
-		return new KeyValue();
-	}
-	
 	public List<String> getColumnNames() {
 		return Collections.unmodifiableList(columnNames);
 	}

@@ -13,7 +13,6 @@ import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;
 import org.peekmoon.database.walker.schema.ForeignKey;
 import org.peekmoon.database.walker.schema.Key;
-import org.peekmoon.database.walker.schema.KeyValue;
 import org.peekmoon.database.walker.schema.Schema;
 import org.peekmoon.database.walker.schema.Table;
 import org.slf4j.Logger;

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.peekmoon.database.walker.schema.KeyValue;
 import org.peekmoon.database.walker.schema.Table;
 
 public class Walker {
