@@ -1,4 +1,4 @@
-package org.peekmoon.database.walker.schema;
+package org.peekmoon.database.walker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +19,12 @@ public class KeyValue {
 	public List<Object> list() {
 		return values;
 	}
+	
+	public Object get(int i) {
+		return values.get(i);
+	}
 
-	public void add(Object object) {
+	void add(Object object) {
 		values.add(object);
 	}
 
