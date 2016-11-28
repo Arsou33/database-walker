@@ -41,6 +41,7 @@ public class Row {
 	
 	public void updateValue(String columnName, Object value) {
 		// TODO : Changed value for primarykey is not allowed
+	    // TODO : if value is null
 		int idx = table.getColumnIdx(columnName);
 		Object oldValue = values.get(idx);
 		if (oldValue!=null && !oldValue.getClass().equals(value.getClass())) {
