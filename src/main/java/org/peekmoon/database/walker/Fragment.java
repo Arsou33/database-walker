@@ -76,12 +76,12 @@ public class Fragment {
 	 * Implementing : https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm
 	 * @return Ordered list of strong connected rows
 	 */
-	List<Set<Row>> getDeleteOrderedPartitions() {
+	public List<Set<Row>> getDeleteOrderedPartitions() {
 		KosarajuAlgo algo = new KosarajuAlgo(rowsChildGraph, rowsParentGraph);
 		return algo.process();
 	}
 	
-	List<Set<Row>> getInsertOrderedPartitions() {
+	public List<Set<Row>> getInsertOrderedPartitions() {
 		KosarajuAlgo algo = new KosarajuAlgo(rowsParentGraph, rowsChildGraph);
 		return algo.process();
 	}

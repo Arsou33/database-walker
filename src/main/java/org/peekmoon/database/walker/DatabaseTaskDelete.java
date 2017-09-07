@@ -3,28 +3,17 @@ package org.peekmoon.database.walker;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.peekmoon.database.walker.schema.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatabaseTaskDelete {
+public class DatabaseTaskDelete extends DeleteOrderDatabaseTask {
 	
 	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
 
-	
-	public void delete(Connection conn, Fragment fragment) throws SQLException {
-		for (Set<Row> partition : fragment.getDeleteOrderedPartitions()) {
-			for (Row row : partition) {
-				delete(conn, row);
-			}
-		}		
-	}
-
-
-	public void delete(Connection conn, Row row) throws SQLException {
+	public void process(Connection conn, Row row) throws SQLException {
 		String sql = getSqlDelete(row.getTable());
 		// TODO : mutualize preparedStatement
 		try (PreparedStatement stmt =  conn.prepareStatement(sql)) {

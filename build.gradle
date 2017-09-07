@@ -5,7 +5,7 @@ apply plugin: 'signing'
 
 group = "org.peekmoon"
 archivesBaseName = "database-walker"
-version = "0.0.3"
+version = "0.0.5-SNAPSHOT"
 
 sourceCompatibility = 1.8
 

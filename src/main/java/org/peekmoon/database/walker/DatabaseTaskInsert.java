@@ -15,20 +15,11 @@ import org.peekmoon.database.walker.schema.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatabaseTaskInsert {
+public class DatabaseTaskInsert extends InsertOrderDatabaseTask {
 	
 	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
 
-	public void insert(Connection conn, Fragment fragment) throws SQLException {
-		for (Set<Row> partition : fragment.getInsertOrderedPartitions()) {
-			if (partition.size()>1) throw new IllegalStateException("Row graph is not acyclic : " + partition);
-			for (Row row : partition) {
-				insert(conn, row);
-			}
-		}		
-	}
-
-	private void insert(Connection conn, Row row) throws SQLException {
+	public void process(Connection conn, Row row) throws SQLException {
 		Table table = row.getTable();
 		String sql = table.getSqlInsert();
 		// TODO : mutualize preparedStatement

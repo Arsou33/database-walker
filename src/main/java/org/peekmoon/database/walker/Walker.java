@@ -33,7 +33,7 @@ public class Walker {
 
 	public void insert(Connection conn, Fragment fragment) throws SQLException {
 		DatabaseTaskInsert inserter = new DatabaseTaskInsert();
-		inserter.insert(conn, fragment);
+		inserter.process(conn, fragment);
 		
 	}
 	
@@ -45,7 +45,13 @@ public class Walker {
 
 	public void delete(Connection conn, Fragment fragment) throws SQLException {
 		DatabaseTaskDelete delete = new DatabaseTaskDelete();
-		delete.delete(conn, fragment);		
+		delete.process(conn, fragment);		
 	}
+	
 
+    public void execute(DatabaseTask task, Connection conn, Fragment fragment) throws SQLException {
+        task.process(conn, fragment);
+    }
+	
+	
 }
