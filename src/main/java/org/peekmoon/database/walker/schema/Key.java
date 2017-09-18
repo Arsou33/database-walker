@@ -2,19 +2,20 @@ package org.peekmoon.database.walker.schema;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Key {
-	
+
 	private final String name;
 	private final Table table;
 	private final List<Integer> columnIdxs;
-	
+
 	public Key(String name, Table table) {
 		this.name = name;
 		this.table = table;
 		this.columnIdxs = new ArrayList<>();
 	}
-	
+
 	public void addColumn(String columnName) {
 		Integer columnIdx = table.getColumnIdx(columnName);
 		columnIdxs.add(columnIdx);
@@ -23,19 +24,19 @@ public class Key {
 	public Table getTable() {
 		return table;
 	}
-	
+
 	public Schema getSchema() {
 		return table.getSchema();
 	}
-	
+
 	public boolean isName(String keyName) {
 		return this.name.equals(keyName);
 	}
-	
+
 	public String getSqlSelect() {
 		return table.getSqlSelect() + getSqlWhere();
 	}
-	
+
 	public String getSqlWhere() {
 		StringBuilder sb = new StringBuilder(" WHERE 1=1 ");
 		for (int columnIdx : columnIdxs) {
@@ -43,11 +44,17 @@ public class Key {
 		}
 		return sb.toString();
 	}
-	
+
 	public List<Integer> getColumnIdxs() {
 		return columnIdxs;
 	}
-	
+
+	public List<String> getColumnNames() {
+		return columnIdxs.stream()
+				.map(table::getColumnName)
+				.collect(Collectors.toList());
+	}
+
 	public boolean contains(int i) {
 		return columnIdxs.contains(i);
 	}
@@ -81,7 +88,7 @@ public class Key {
 			return false;
 		return true;
 	}
-	
-	
+
+
 
 }
