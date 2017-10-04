@@ -20,8 +20,10 @@ public class DatabaseTaskConditionalInsert extends InsertOrderDatabaseTask {
 
     @Override
     public void process(Connection conn, Row row) throws SQLException {
-        if (!row.isToInsert() || (!row.getParents().isEmpty() && row.getParents().stream().allMatch(p -> !p.isToInsert()))) {
-            System.out.println("Row " + row.getTable().getName() + " is NOT inserted !");
+        if (!row.isToInsert()
+        		|| (!row.getParents().isEmpty()
+        				&& row.getParents().stream().allMatch(p -> !p.isToInsert()))) {
+        	row.setToInsert(false);
             return;
         }
         Table table = row.getTable();
@@ -48,8 +50,7 @@ public class DatabaseTaskConditionalInsert extends InsertOrderDatabaseTask {
 
                 stmt.setObject(i+1, value);
             }
-            System.out.println(row.getTable() + " : " + row.getPrimaryKey() + " = " + row.getPrimaryKeyValue());
-//            stmt.executeUpdate();
+            stmt.executeUpdate();
         } 
         finally {
             for (Clob clob : clobs) clob.free();
