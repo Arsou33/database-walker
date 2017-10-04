@@ -36,6 +36,17 @@ public class Walker {
 		inserter.process(conn, fragment);
 		
 	}
+
+    public void insertConditional(DataSource ds, Fragment fragment, ProcessConditional conditions) throws SQLException {
+		try (Connection conn = ds.getConnection()) {
+			insertConditional(conn, fragment, conditions);
+		}
+    }
+
+    public void insertConditional(Connection conn, Fragment fragment, ProcessConditional conditions) throws SQLException {
+        DatabaseTaskConditionalInsert inserter = new DatabaseTaskConditionalInsert();
+        inserter.process(conn, fragment, conditions);
+    }
 	
 	public void delete(DataSource ds, Fragment fragment) throws SQLException {
 		try (Connection conn = ds.getConnection()) {

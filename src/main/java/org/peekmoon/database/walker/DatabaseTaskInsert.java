@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;

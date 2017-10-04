@@ -51,7 +51,7 @@ public class KosarajuAlgo {
 				visit(parent);
 			}
 			l.push(row);
-		};
+		}
 	}
 	
 	private void assign(Row row, Row rootRow) {

@@ -24,5 +24,8 @@ public class CustomClob {
 		return clob;
 	}
 	
+	public String getValue() {
+	    return this.value;
+	}	
 
 }
