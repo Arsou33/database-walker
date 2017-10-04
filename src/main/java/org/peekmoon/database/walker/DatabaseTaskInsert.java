@@ -18,6 +18,7 @@ public class DatabaseTaskInsert extends InsertOrderDatabaseTask {
 	
 	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
 
+	@Override
 	public void process(Connection conn, Row row) throws SQLException {
 		Table table = row.getTable();
 		String sql = table.getSqlInsert();
