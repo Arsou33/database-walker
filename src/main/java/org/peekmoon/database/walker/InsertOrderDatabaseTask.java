@@ -19,4 +19,15 @@ public class InsertOrderDatabaseTask implements DatabaseTask {
             }
         }
     }
+
+    public void process(Connection conn, Fragment fragment, ProcessConditional conditions) throws SQLException {
+        fragment.getRows().stream().forEach(r -> r.setToInsert(conditions.isToProcess(r, fragment)));
+
+        for (Set<Row> partition : fragment.getInsertOrderedPartitions()) {
+            if (partition.size()>1) throw new IllegalStateException("Row graph is not acyclic : " + partition);
+            for (Row row : partition) {
+                process(conn, row);
+            }
+        }
+    }
 }
