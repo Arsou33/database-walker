@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class DatabaseTaskInsert extends InsertOrderDatabaseTask {
 	
-	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskDelete.class);
+	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskInsert.class);
 
 	@Override
 	public void process(Connection conn, Row row) throws SQLException {
