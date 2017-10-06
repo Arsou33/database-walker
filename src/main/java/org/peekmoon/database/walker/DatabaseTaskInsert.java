@@ -15,40 +15,48 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DatabaseTaskInsert extends InsertOrderDatabaseTask {
-	
+
 	private final static Logger log = LoggerFactory.getLogger(DatabaseTaskInsert.class);
 
 	@Override
 	public void process(Connection conn, Row row) throws SQLException {
-		Table table = row.getTable();
-		String sql = table.getSqlInsert();
-		// TODO : mutualize preparedStatement
-		List<Clob> clobs = new LinkedList<>();
-		List<Blob> blobs = new LinkedList<>();
-		try (PreparedStatement stmt =  conn.prepareStatement(sql)) {
-			log.debug(sql);
-			
-			for (int i=0; i<row.getValues().size(); i++) {
-				
-				Object value = row.getValue(i);
-				
-				if (value instanceof CustomClob) {
-					Clob clob = ((CustomClob)value).asClob(conn);
-					clobs.add(clob);
-					value = clob;
-				} else if (value instanceof CustomBlob) {
-					Blob blob = ((CustomBlob)value).asBlob(conn);
-					blobs.add(blob);
-					value = blob;
-				}
+		if (row.isToInsert()
+				&& (row.getParents().isEmpty()
+						|| row.getParents().stream().anyMatch(Row::isToInsert))) {
+			Table table = row.getTable();
+			String sql = table.getSqlInsert();
+			// TODO : mutualize preparedStatement
+			List<Clob> clobs = new LinkedList<>();
+			List<Blob> blobs = new LinkedList<>();
+			try (PreparedStatement stmt =  conn.prepareStatement(sql)) {
+				log.debug(sql);
 
-				stmt.setObject(i+1, value);
-			}		
-			stmt.executeUpdate();
-		} 
-		finally {
-			for (Clob clob : clobs) clob.free();
-			for (Blob blob : blobs) blob.free();
+				for (int i=0; i<row.getValues().size(); i++) {
+					
+					Object value = row.getValue(i);
+					
+					if (value instanceof CustomClob) {
+						Clob clob = ((CustomClob)value).asClob(conn);
+						clobs.add(clob);
+						value = clob;
+					} else if (value instanceof CustomBlob) {
+						Blob blob = ((CustomBlob)value).asBlob(conn);
+						blobs.add(blob);
+						value = blob;
+					}
+
+					stmt.setObject(i+1, value);
+				}
+				stmt.executeUpdate();
+			} 
+			finally {
+				for (Clob clob : clobs) clob.free();
+				for (Blob blob : blobs) blob.free();
+			}
+		}
+		else {
+			row.setToInsert(false);
 		}
 	}
 }
+

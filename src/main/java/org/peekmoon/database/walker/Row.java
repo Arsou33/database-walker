@@ -45,7 +45,7 @@ public class Row {
 	
 	public void updateValue(String columnName, Object value) {
 		// TODO : Changed value for primarykey is not allowed
-	    // TODO : if value is null
+		// TODO : if value is null
 		int idx = table.getColumnIdx(columnName);
 		Object oldValue = values.get(idx);
 		if (oldValue!=null && !oldValue.getClass().equals(value.getClass())) {
@@ -91,20 +91,20 @@ public class Row {
 	}
 	
 	public void addParent(Row parentRow) {
-	    this.parents.add(parentRow);
+		this.parents.add(parentRow);
 	}
 	
 	public List<Row> getParents() {
-	    return parents;
+		return parents;
 	}
 	
 	public boolean isToInsert() {
-        return toInsert;
-    }
+		return toInsert;
+	}
 
-    public void setToInsert(boolean toInsert) {
-        this.toInsert = toInsert;
-    }
+	public void setToInsert(boolean toInsert) {
+		this.toInsert = toInsert;
+	}
 	
 	public String toStringDetail() {
 		StringBuilder lineColumnName = new StringBuilder();
