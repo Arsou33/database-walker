@@ -25,7 +25,7 @@ public class CustomClob {
 	}
 	
 	public String getValue() {
-	    return this.value;
+		return this.value;
 	}	
 
 }
