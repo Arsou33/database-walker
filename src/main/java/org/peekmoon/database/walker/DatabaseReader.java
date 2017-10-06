@@ -64,8 +64,7 @@ public class DatabaseReader {
 				if (!fragment.contains(childRow)) {
 					parcours(conn, childRow, niveau, fragment);
 					fragment.add(childRow, row);
-				}
-				else {
+				} else {
 					Optional<Row> optExistingChildRow = fragment.getRows().stream().filter(r -> r.equals(childRow)).findFirst();
 					if (optExistingChildRow.isPresent()) {
 						Row existingChildRow = optExistingChildRow.get();
