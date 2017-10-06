@@ -33,7 +33,15 @@ public class Fragment {
 	public Set<Row> getRowsFromTable(String tableName) {
 		return getRowsFromTable(schema.getTable(tableName));
 	}
-	
+
+	public Set<Row> getParents(Row row) {
+		return rowsChildGraph.get(row);
+	}
+
+	public Set<Row> getChildren(Row row) {
+		return rowsParentGraph.get(row);
+	}
+
 	public Set<Row> getRowsFromTable(Table table) {
 	    Set<Row> rows = rowsChildGraph.keySet().stream()
 		        .filter(row -> row.getTable().equals(table))
