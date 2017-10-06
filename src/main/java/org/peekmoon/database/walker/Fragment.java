@@ -35,11 +35,7 @@ public class Fragment {
 	}
 
 	public Set<Row> getParents(Row row) {
-		return rowsChildGraph.get(row);
-	}
-
-	public Set<Row> getChildren(Row row) {
-		return rowsParentGraph.get(row);
+		return Collections.unmodifiableSet(rowsChildGraph.get(row));
 	}
 
 	public Set<Row> getRowsFromTable(Table table) {
