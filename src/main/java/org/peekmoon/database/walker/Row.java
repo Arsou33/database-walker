@@ -84,6 +84,10 @@ public class Row {
 		return values.get(i);
 	}
 
+	public Object getValue(String columnName) {
+		return values.get(table.getColumnIdx(columnName));
+	}
+
 	public Table getTable() {
 		return table;
 	}
