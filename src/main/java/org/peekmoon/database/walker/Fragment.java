@@ -39,9 +39,9 @@ public class Fragment {
 	}
 
 	public Set<Row> getRowsFromTable(Table table) {
-	    Set<Row> rows = rowsChildGraph.keySet().stream()
-		        .filter(row -> row.getTable().equals(table))
-		        .collect(Collectors.toSet());
+		Set<Row> rows = rowsChildGraph.keySet().stream()
+				.filter(row -> row.getTable().equals(table))
+				.collect(Collectors.toSet());
 		return Collections.unmodifiableSet(rows);
 	}
 
