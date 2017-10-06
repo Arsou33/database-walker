@@ -63,14 +63,12 @@ public class DatabaseReader {
 			for (Row childRow : rows) {
 				if (!fragment.contains(childRow)) {
 					parcours(conn, childRow, niveau, fragment);
-					childRow.addParent(row);
 					fragment.add(childRow, row);
 				}
 				else {
 					Optional<Row> optExistingChildRow = fragment.getRows().stream().filter(r -> r.equals(childRow)).findFirst();
 					if (optExistingChildRow.isPresent()) {
 						Row existingChildRow = optExistingChildRow.get();
-						existingChildRow.addParent(row);
 						fragment.add(existingChildRow, row);
 					}
 				}

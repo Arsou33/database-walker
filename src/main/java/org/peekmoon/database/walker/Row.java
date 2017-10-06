@@ -15,14 +15,12 @@ public class Row {
 	private final Table table;
 	private final RowId rowId;
 	private final List<Object> values;
-	private final List<Row> parents;
 	private boolean toInsert;
 	
 	public Row(Table table, RowId rowId) {
 		this.table = table;
 		this.rowId = rowId;
 		this.values = new ArrayList<>();
-		this.parents = new ArrayList<>();
 		this.toInsert = true;
 	}
 	
@@ -89,15 +87,7 @@ public class Row {
 	public Table getTable() {
 		return table;
 	}
-	
-	public void addParent(Row parentRow) {
-		this.parents.add(parentRow);
-	}
-	
-	public List<Row> getParents() {
-		return parents;
-	}
-	
+
 	public boolean isToInsert() {
 		return toInsert;
 	}

@@ -14,7 +14,14 @@ public class InsertOrderDatabaseTask implements DatabaseTask {
 		for (Set<Row> partition : fragment.getInsertOrderedPartitions()) {
 			if (partition.size()>1) throw new IllegalStateException("Row graph is not acyclic : " + partition);
 			for (Row row : partition) {
-				process(conn, row);
+				if (row.isToInsert()
+						&& (fragment.getParents(row).isEmpty()
+								|| fragment.getParents(row).stream().anyMatch(Row::isToInsert))) {
+					process(conn, row);
+				}
+				else {
+					row.setToInsert(false);
+				}
 			}
 		}
 	}
