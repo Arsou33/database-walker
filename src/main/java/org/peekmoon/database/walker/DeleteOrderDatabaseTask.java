@@ -1,21 +1,18 @@
 package org.peekmoon.database.walker;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class DeleteOrderDatabaseTask implements DatabaseTask {
-	
-	public void process(Connection conn, Row row) throws SQLException {
-		
+abstract class DeleteOrderDatabaseTask implements DatabaseTask {
+
+	public DeleteOrderDatabaseTask() {
+		mappedIgnoredRows.computeIfAbsent(this.getClass(), c -> new HashSet<>());
 	}
 
-	
-	public void process(Connection conn, Fragment fragment) throws SQLException {
-		for (Set<Row> partition : fragment.getDeleteOrderedPartitions()) {
-			for (Row row : partition) {
-				process(conn, row);
-			}
-		}	   
+	@Override
+	public List<Set<Row>> getOrderedPartitions(Fragment fragment) {
+		return fragment.getDeleteOrderedPartitions();
 	}
+
 }

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,13 @@ public class Fragment {
 	
 	void add(Row childRow, Row row) {
 		rowsChildGraph.get(childRow).add(row);
-		rowsParentGraph.get(row).add(childRow);
+		Optional<Row> optExistingChildRow = getRows().stream().filter(r -> r.equals(childRow)).findFirst();
+		if (optExistingChildRow.isPresent()) {
+			Row existingChildRow = optExistingChildRow.get();
+			rowsParentGraph.get(row).add(existingChildRow);
+		} else {
+			rowsParentGraph.get(row).add(childRow);
+		}
 	}
 
 	void add(Fragment fragment) {
@@ -89,11 +96,5 @@ public class Fragment {
 		KosarajuAlgo algo = new KosarajuAlgo(rowsParentGraph, rowsChildGraph);
 		return algo.process();
 	}
-
-
-
-
-	
-	
 
 }
