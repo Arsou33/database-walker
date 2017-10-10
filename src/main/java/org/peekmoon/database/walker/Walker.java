@@ -11,8 +11,7 @@ public class Walker {
 
 	public Fragment extract(DataSource ds, Table table, KeyValue...values) throws SQLException {
 		try (Connection conn = ds.getConnection()) {
-			Fragment fragment = extract(conn, table, values);
-			return fragment;
+			return extract(conn, table, values);
 		}
 	}
 
@@ -33,7 +32,7 @@ public class Walker {
 
 	public void insert(Connection conn, Fragment fragment) throws SQLException {
 		DatabaseTaskInsert inserter = new DatabaseTaskInsert();
-		inserter.process(conn, fragment);
+		inserter.process(conn, fragment, null);
 		
 	}
 
@@ -56,11 +55,22 @@ public class Walker {
 
 	public void delete(Connection conn, Fragment fragment) throws SQLException {
 		DatabaseTaskDelete delete = new DatabaseTaskDelete();
-		delete.process(conn, fragment);		
+		delete.process(conn, fragment, null);
+	}
+
+	public void delete(DataSource ds, Fragment fragment, RowFilter conditions) throws SQLException {
+		try (Connection conn = ds.getConnection()) {
+			delete(conn, fragment, conditions);
+		}
+	}
+
+	public void delete(Connection conn, Fragment fragment, RowFilter conditions) throws SQLException {
+		DatabaseTaskDelete delete = new DatabaseTaskDelete();
+		delete.process(conn, fragment, conditions);		
 	}
 
 	public void execute(DatabaseTask task, Connection conn, Fragment fragment) throws SQLException {
-		task.process(conn, fragment);
+		task.process(conn, fragment, null);
 	}
 
 }

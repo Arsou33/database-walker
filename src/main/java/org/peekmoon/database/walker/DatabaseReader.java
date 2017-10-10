@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.peekmoon.database.walker.schema.CustomBlob;
 import org.peekmoon.database.walker.schema.CustomClob;
@@ -20,15 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DatabaseReader {
-	
+
 	private final static Logger log = LoggerFactory.getLogger(DatabaseReader.class);
 
 	private final Schema schema;
-	
+
 	public DatabaseReader(Schema schema) {
 		this.schema = schema;
 	}
-	
+
 	/**
 	 * Provide all lines that depends on row table/keyValue
 	 * 
@@ -46,7 +45,6 @@ public class DatabaseReader {
 		return extractedRows;
 	}
 
-	
 	// TODO : mutualize preparedStatement ?
 	private void parcours(Connection conn, Row row, int niveau, Fragment fragment) throws SQLException  {
 		niveau++;
@@ -56,23 +54,17 @@ public class DatabaseReader {
 			logString.append('>').append(row);
 			log.debug(logString.toString());
 		}
-		
+
 		fragment.add(row);
 		for (ForeignKey fk : schema.getFkList(row.getPrimaryKey())) {
 			List<Row> rows = read(conn, fk, row.getPrimaryKeyValue());
 			for (Row childRow : rows) {
 				if (!fragment.contains(childRow)) {
 					parcours(conn, childRow, niveau, fragment);
-					fragment.add(childRow, row);
-				} else {
-					Optional<Row> optExistingChildRow = fragment.getRows().stream().filter(r -> r.equals(childRow)).findFirst();
-					if (optExistingChildRow.isPresent()) {
-						Row existingChildRow = optExistingChildRow.get();
-						fragment.add(existingChildRow, row);
-					}
 				}
+				fragment.add(childRow, row);
 			}
-		}		
+		}
 	}
 
 	private List<Row> read(Connection conn, Key key, KeyValue values) throws SQLException {
@@ -100,6 +92,5 @@ public class DatabaseReader {
 			return rows;
 		}
 	}
-	
 
 }

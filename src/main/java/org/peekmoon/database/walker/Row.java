@@ -15,13 +15,11 @@ public class Row {
 	private final Table table;
 	private final RowId rowId;
 	private final List<Object> values;
-	private boolean toInsert;
 	
 	public Row(Table table, RowId rowId) {
 		this.table = table;
 		this.rowId = rowId;
 		this.values = new ArrayList<>();
-		this.toInsert = true;
 	}
 	
 	/**
@@ -92,14 +90,6 @@ public class Row {
 		return table;
 	}
 
-	public boolean isToInsert() {
-		return toInsert;
-	}
-
-	public void setToInsert(boolean toInsert) {
-		this.toInsert = toInsert;
-	}
-	
 	public String toStringDetail() {
 		StringBuilder lineColumnName = new StringBuilder();
 		StringBuilder lineValue = new StringBuilder();
