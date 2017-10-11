@@ -1,14 +1,9 @@
 package org.peekmoon.database.walker;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-abstract class InsertOrderDatabaseTask implements DatabaseTask {
-
-	public InsertOrderDatabaseTask() {
-		mappedIgnoredRows.computeIfAbsent(this.getClass(), c -> new HashSet<>());
-	}
+abstract class InsertOrderDatabaseTask extends DatabaseTask {
 
 	@Override
 	public List<Set<Row>> getOrderedPartitions(Fragment fragment) {

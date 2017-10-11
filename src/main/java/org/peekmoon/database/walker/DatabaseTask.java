@@ -2,16 +2,15 @@ package org.peekmoon.database.walker;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public interface DatabaseTask {
+public abstract class DatabaseTask {
 
-	final Map<Class<? extends DatabaseTask>, Set<Row>> mappedIgnoredRows = new HashMap<>();
+	final Set<Row> ignoredRows = new HashSet<>();
 
-	default void process(Connection conn, Fragment fragment, RowFilter filter) throws SQLException {
+	public void process(Connection conn, Fragment fragment, RowFilter filter) throws SQLException {
 		if (filter != null) {
 			preProcess(fragment, filter);
 		}
@@ -22,25 +21,25 @@ public interface DatabaseTask {
 		}
 	}
 
-	default void preProcess(Fragment fragment, RowFilter filter) {
+	protected void preProcess(Fragment fragment, RowFilter filter) {
 		fragment.getRows().stream()
 			.filter(row -> filter.ignoreRow(row, fragment))
-			.forEach(row -> mappedIgnoredRows.get(this.getClass()).add(row));
+			.forEach(ignoredRows::add);
 	}
 
-	default void postProcess(Connection conn, Fragment fragment, Row row) throws SQLException {
-		if (!mappedIgnoredRows.get(this.getClass()).contains(row)
+	protected void postProcess(Connection conn, Fragment fragment, Row row) throws SQLException {
+		if (!ignoredRows.contains(row)
 				&& (fragment.getParents(row).isEmpty()
-						|| fragment.getParents(row).stream().anyMatch(p -> !mappedIgnoredRows.get(this.getClass()).contains(p)))) {
+						|| fragment.getParents(row).stream().anyMatch(p -> !ignoredRows.contains(p)))) {
 			process(conn, row);
 		}
 		else {
-			mappedIgnoredRows.get(this.getClass()).add(row);
+			ignoredRows.add(row);
 		}
 	}
 
-	void process(Connection conn, Row row) throws SQLException;
+	protected abstract void process(Connection conn, Row row) throws SQLException;
 
-	List<Set<Row>> getOrderedPartitions(Fragment fragment);
+	protected abstract List<Set<Row>> getOrderedPartitions(Fragment fragment);
 
 }
