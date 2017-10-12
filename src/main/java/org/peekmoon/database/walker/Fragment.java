@@ -57,6 +57,8 @@ public class Fragment {
 	
 	void add(Row childRow, Row row) {
 		rowsChildGraph.get(childRow).add(row);
+		// Remove duplicate row (same row but different instance
+		// TODO : Check if really necessary
 		Optional<Row> optExistingChildRow = getRows().stream().filter(r -> r.equals(childRow)).findFirst();
 		if (optExistingChildRow.isPresent()) {
 			Row existingChildRow = optExistingChildRow.get();
